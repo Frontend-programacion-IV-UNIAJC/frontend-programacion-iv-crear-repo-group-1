@@ -1,5 +1,5 @@
 <<<<<<< HEAD
-# prog4-proyecto
+# prog4-proyecto Biblitech
 Proyecto de Programacion IV - Frontend y Experiencia de Usuario
 =======
 # frontend-programacion-iv-crear-repo-group-1

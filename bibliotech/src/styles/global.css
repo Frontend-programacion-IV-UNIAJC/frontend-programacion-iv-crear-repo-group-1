@@ -41,11 +41,11 @@ select {
   font-size: var(--text-base);
 }
 
-.container {
+.container,
+.contenedor {
   width: min(90%, var(--container-width));
   margin-inline: auto;
 }
-
 h1,
 h2,
 h3,

@@ -1,0 +1,43 @@
+
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout
+  titulo="Detalle del libro | BiblioTech"
+  descripcion="Consulta la información detallada de cada libro."
+  activo="catalogo"
+>
+  <section class="contenedor pagina">
+    <p class="rotulo">Información bibliográfica</p>
+    <h1>Detalle del libro</h1>
+    <p>Consulta los datos y características de cada publicación.</p>
+
+    <div class="pendiente">
+      Aquí aparecerán la portada, el título, el autor, el año y la descripción
+      del libro seleccionado.
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .pagina {
+    padding-top: 48px;
+    padding-bottom: 48px;
+    min-height: 350px;
+  }
+
+  .rotulo {
+    color: var(--color-primary);
+    font-weight: 700;
+  }
+
+  .pendiente {
+    margin-top: 28px;
+    padding: 36px 20px;
+    border: 2px dashed var(--border-color);
+    border-radius: var(--border-radius-lg);
+    text-align: center;
+    color: var(--color-text-secondary);
+  }
+</style>

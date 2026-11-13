@@ -1,0 +1,67 @@
+
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout
+  titulo="Estados | BiblioTech"
+  descripcion="Estados de búsqueda y visualización de libros."
+  activo="catalogo"
+>
+  <section class="contenedor pagina">
+    <p class="rotulo">Experiencia de usuario</p>
+    <h1>Estados del catálogo</h1>
+    <p>Mensajes que aparecen cuando no hay resultados o falta una portada.</p>
+
+    <div class="estados">
+      <article class="pendiente">
+        <h2>Sin resultados</h2>
+        <p>No encontramos libros que coincidan con tu búsqueda.</p>
+      </article>
+
+      <article class="pendiente">
+        <h2>Sin portada</h2>
+        <p>Este libro todavía no tiene una imagen de portada disponible.</p>
+      </article>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .pagina {
+    padding-top: 48px;
+    padding-bottom: 48px;
+    min-height: 350px;
+  }
+
+  .rotulo {
+    color: var(--color-primary);
+    font-weight: 700;
+  }
+
+  .estados {
+    display: grid;
+    gap: 20px;
+    margin-top: 28px;
+  }
+
+  .pendiente {
+    padding: 36px 20px;
+    border: 2px dashed var(--border-color);
+    border-radius: var(--border-radius-lg);
+    text-align: center;
+    color: var(--color-text-secondary);
+  }
+
+  .pendiente h2 {
+    color: var(--color-text);
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+  }
+
+  @media (min-width: 768px) {
+    .estados {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>

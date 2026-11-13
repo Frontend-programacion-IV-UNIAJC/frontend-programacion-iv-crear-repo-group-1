@@ -1,0 +1,42 @@
+
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout
+  titulo="Catálogo | BiblioTech"
+  descripcion="Explora el catálogo de libros de BiblioTech."
+  activo="catalogo"
+>
+  <section class="contenedor pagina">
+    <p class="rotulo">Biblioteca digital</p>
+    <h1>Catálogo de libros</h1>
+    <p>Explora y descubre libros disponibles en nuestra biblioteca.</p>
+
+    <div class="pendiente">
+      Aquí se mostrarán los libros del catálogo.
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .pagina {
+    padding-top: 48px;
+    padding-bottom: 48px;
+    min-height: 350px;
+  }
+
+  .rotulo {
+    color: var(--color-primary);
+    font-weight: 700;
+  }
+
+  .pendiente {
+    margin-top: 28px;
+    padding: 36px 20px;
+    border: 2px dashed var(--border-color);
+    border-radius: var(--border-radius-lg);
+    text-align: center;
+    color: var(--color-text-secondary);
+  }
+</style>

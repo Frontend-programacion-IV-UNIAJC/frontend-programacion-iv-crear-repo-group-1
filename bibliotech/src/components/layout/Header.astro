@@ -1,0 +1,86 @@
+
+---
+const base = "/frontend-programacion-iv-crear-repo-group-1/";
+const { activo = "inicio" } = Astro.props;
+
+const enlaces = [
+  { nombre: "Inicio", ruta: "", id: "inicio" },
+  { nombre: "Catálogo", ruta: "catalogo", id: "catalogo" },
+  { nombre: "Filtros", ruta: "filtros", id: "filtros" },
+  { nombre: "Registro", ruta: "registro", id: "registro" },
+];
+---
+
+<header class="header">
+  <div class="contenedor header__interior">
+    <a class="header__marca" href={base}>BiblioTech</a>
+
+    <nav class="header__nav" aria-label="Navegación principal">
+      {enlaces.map((enlace) => (
+        <a
+          href={`${base}${enlace.ruta ? `${enlace.ruta}/` : ""}`}
+          class:list={[
+            "header__enlace",
+            { "header__enlace--activo": activo === enlace.id },
+          ]}
+          aria-current={activo === enlace.id ? "page" : undefined}
+        >
+          {enlace.nombre}
+        </a>
+      ))}
+    </nav>
+  </div>
+</header>
+
+<style>
+  .header {
+    background: var(--color-surface);
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .header__interior {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding-top: 16px;
+    padding-bottom: 16px;
+  }
+
+  .header__marca {
+    color: var(--color-primary);
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+
+  .header__nav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .header__enlace {
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  .header__enlace:hover,
+  .header__enlace--activo {
+    color: var(--color-primary);
+  }
+
+  .header__enlace--activo {
+    text-decoration: underline;
+    text-underline-offset: 6px;
+  }
+
+  @media (max-width: 480px) {
+    .header__interior,
+    .header__nav {
+      justify-content: center;
+    }
+  }
+</style>

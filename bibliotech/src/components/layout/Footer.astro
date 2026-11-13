@@ -1,0 +1,114 @@
+
+---
+const anio = new Date().getFullYear();
+const base = "/frontend-programacion-iv-crear-repo-group-1/";
+
+const enlaces = [
+  { nombre: "Inicio", ruta: "" },
+  { nombre: "Registro", ruta: "registro" },
+  { nombre: "Catálogo", ruta: "catalogo" },
+  { nombre: "Filtros", ruta: "filtros" },
+  { nombre: "Detalle del libro", ruta: "detalle" },
+  { nombre: "Estados", ruta: "estados" },
+];
+---
+
+<footer class="footer">
+  <div class="contenedor footer__contenido">
+    <div class="footer__bloque">
+      <h2 class="footer__marca">BiblioTech</h2>
+      <p>
+        Una biblioteca digital para descubrir libros, consultar información
+        bibliográfica y explorar nuevas lecturas.
+      </p>
+    </div>
+
+    <nav class="footer__bloque" aria-label="Enlaces del pie de página">
+      <h3>Explorar</h3>
+      <ul>
+        {enlaces.map((enlace) => (
+          <li>
+            <a href={`${base}${enlace.ruta ? `${enlace.ruta}/` : ""}`}>
+              {enlace.nombre}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <div class="footer__bloque">
+      <h3>Fuente de datos</h3>
+      <p>
+        La información de los libros se consulta mediante
+        <a href="https://openlibrary.org/" target="_blank" rel="noopener noreferrer">
+          Open Library
+        </a>.
+      </p>
+    </div>
+  </div>
+
+  <div class="contenedor footer__legal">
+    <p>© {anio} BiblioTech. Proyecto académico de Programación IV — UNIAJC.</p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    margin-top: 48px;
+    background: var(--color-surface);
+    border-top: 1px solid var(--border-color);
+  }
+
+  .footer__contenido {
+    display: grid;
+    gap: 28px;
+    padding-top: 32px;
+    padding-bottom: 28px;
+  }
+
+  .footer__marca {
+    color: var(--color-primary);
+    font-size: 1.3rem;
+    margin-bottom: 8px;
+  }
+
+  .footer__bloque h3 {
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+  }
+
+  .footer__bloque p,
+  .footer__bloque a {
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+  }
+
+  .footer__bloque ul {
+    list-style: none;
+    display: grid;
+    gap: 8px;
+  }
+
+  .footer__bloque a:hover {
+    color: var(--color-primary);
+    text-decoration: underline;
+  }
+
+  .footer__legal {
+    border-top: 1px solid var(--border-color);
+    padding-top: 16px;
+    padding-bottom: 20px;
+  }
+
+  .footer__legal p {
+    color: var(--color-text-secondary);
+    font-size: 0.8rem;
+  }
+
+  @media (min-width: 768px) {
+    .footer__contenido {
+      grid-template-columns: 1.6fr 1fr 1.2fr;
+    }
+  }
+</style>
+

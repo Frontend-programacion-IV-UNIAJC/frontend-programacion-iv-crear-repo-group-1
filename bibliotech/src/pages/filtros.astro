@@ -1,0 +1,42 @@
+
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout
+  titulo="Filtros | BiblioTech"
+  descripcion="Encuentra libros utilizando filtros de búsqueda."
+  activo="filtros"
+>
+  <section class="contenedor pagina">
+    <p class="rotulo">Personaliza tu búsqueda</p>
+    <h1>Filtrar libros</h1>
+    <p>Encuentra libros según tus preferencias.</p>
+
+    <div class="pendiente">
+      Aquí estarán los filtros por categoría, autor y año de publicación.
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .pagina {
+    padding-top: 48px;
+    padding-bottom: 48px;
+    min-height: 350px;
+  }
+
+  .rotulo {
+    color: var(--color-primary);
+    font-weight: 700;
+  }
+
+  .pendiente {
+    margin-top: 28px;
+    padding: 36px 20px;
+    border: 2px dashed var(--border-color);
+    border-radius: var(--border-radius-lg);
+    text-align: center;
+    color: var(--color-text-secondary);
+  }
+</style>

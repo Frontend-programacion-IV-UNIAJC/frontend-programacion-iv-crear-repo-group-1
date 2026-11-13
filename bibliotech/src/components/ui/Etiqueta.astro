@@ -1,0 +1,30 @@
+
+---
+const { tono = "neutro" } = Astro.props;
+---
+
+<span class={`etiqueta etiqueta--${tono}`}>
+  <slot />
+</span>
+
+<style>
+  .etiqueta {
+    display: inline-flex;
+    align-items: center;
+    font-size: var(--text-sm);
+    line-height: 1;
+    padding: 7px 12px;
+    border-radius: 30px;
+    border: 1px solid var(--border-color);
+    background: var(--color-background);
+    color: var(--color-text-secondary);
+    white-space: nowrap;
+  }
+
+  .etiqueta--marca {
+    background: var(--color-surface-secondary);
+    border-color: var(--color-secondary);
+    color: var(--color-primary-dark);
+    font-weight: 600;
+  }
+</style>

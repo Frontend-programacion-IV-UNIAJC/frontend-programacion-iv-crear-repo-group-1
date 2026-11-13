@@ -1,0 +1,42 @@
+
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout
+  titulo="Registro | BiblioTech"
+  descripcion="Crea tu cuenta en BiblioTech."
+  activo="registro"
+>
+  <section class="contenedor pagina">
+    <p class="rotulo">Únete a BiblioTech</p>
+    <h1>Registro de usuarios</h1>
+    <p>Regístrate para comenzar a explorar nuestra biblioteca digital.</p>
+
+    <div class="pendiente">
+      El formulario de registro se desarrollará próximamente.
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .pagina {
+    padding-top: 48px;
+    padding-bottom: 48px;
+    min-height: 350px;
+  }
+
+  .rotulo {
+    color: var(--color-primary);
+    font-weight: 700;
+  }
+
+  .pendiente {
+    margin-top: 28px;
+    padding: 36px 20px;
+    border: 2px dashed var(--border-color);
+    border-radius: var(--border-radius-lg);
+    text-align: center;
+    color: var(--color-text-secondary);
+  }
+</style>

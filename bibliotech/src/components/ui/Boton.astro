@@ -1,0 +1,68 @@
+
+---
+const {
+  href,
+  variante = "primario",
+  tamano = "normal",
+  tipo = "button",
+  ...resto
+} = Astro.props;
+
+const EtiquetaHTML = href ? "a" : "button";
+const clases = ["boton", `boton--${variante}`, `boton--${tamano}`].join(" ");
+---
+
+<EtiquetaHTML
+  class={clases}
+  href={href}
+  type={href ? undefined : tipo}
+  {...resto}
+>
+  <slot />
+</EtiquetaHTML>
+
+<style>
+  .boton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-primary);
+    font-size: var(--text-base);
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: var(--border-radius-md);
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: var(--transition);
+    min-height: 44px;
+    padding: 0 24px;
+  }
+
+  .boton--grande {
+    min-height: 52px;
+    padding: 0 28px;
+    font-size: var(--text-lg);
+  }
+
+  .boton--primario {
+    background: var(--color-primary);
+    color: white;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .boton--primario:hover {
+    background: var(--color-primary-dark);
+  }
+
+  .boton--secundario {
+    background: var(--color-surface);
+    color: var(--color-primary);
+    border-color: var(--color-secondary);
+  }
+
+  .boton--fantasma {
+    background: transparent;
+    color: var(--color-text);
+    border-color: var(--border-color);
+  }
+</style>

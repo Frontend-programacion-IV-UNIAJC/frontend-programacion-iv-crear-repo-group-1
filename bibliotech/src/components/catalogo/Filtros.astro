@@ -1,0 +1,75 @@
+
+---
+interface Props {
+  categorias: string[];
+  categoriaSeleccionada?: string;
+}
+
+const {
+  categorias = [],
+  categoriaSeleccionada = "Todas"
+}: Props = Astro.props;
+---
+
+<aside class="filtros">
+  <h2 class="filtros__titulo">Categorías</h2>
+
+  <nav class="filtros__lista" aria-label="Filtrar libros por categoría">
+    <a
+      href="?categoria=Todas"
+      class:list={[
+        "filtros__opcion",
+        { "filtros__opcion--activa": categoriaSeleccionada === "Todas" }
+      ]}
+    >
+      Todas
+    </a>
+
+    {categorias.map((categoria) => (
+      <a
+        href={`?categoria=${encodeURIComponent(categoria)}`}
+        class:list={[
+          "filtros__opcion",
+          { "filtros__opcion--activa": categoriaSeleccionada === categoria }
+        ]}
+      >
+        {categoria}
+      </a>
+    ))}
+  </nav>
+</aside>
+
+<style>
+  .filtros {
+    padding: 20px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    background: var(--color-surface);
+  }
+
+  .filtros__titulo {
+    margin: 0 0 16px;
+    font-size: 18px;
+    color: var(--color-text);
+  }
+
+  .filtros__lista {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .filtros__opcion {
+    padding: 10px 12px;
+    border-radius: 8px;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    transition: background 0.2s ease;
+  }
+
+  .filtros__opcion:hover,
+  .filtros__opcion--activa {
+    background: var(--color-primary);
+    color: white;
+  }
+</style>

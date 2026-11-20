@@ -1,0 +1,43 @@
+
+---
+import Card from "./Card.astro";
+
+interface Libro {
+  id: string | number;
+  titulo: string;
+  autor: string;
+  categoria: string;
+  imagen: string;
+  anio: number;
+  editorial: string;
+  descripcion: string;
+}
+
+interface Props {
+  libros: Libro[];
+}
+
+const { libros = [] }: Props = Astro.props;
+---
+
+<div class="tarjetas">
+  {libros.map((libro) => (
+    <Card libro={libro} />
+  ))}
+</div>
+
+<style>
+  .tarjetas {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 24px;
+    width: 100%;
+  }
+
+  @media (max-width: 600px) {
+    .tarjetas {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+  }
+</style>

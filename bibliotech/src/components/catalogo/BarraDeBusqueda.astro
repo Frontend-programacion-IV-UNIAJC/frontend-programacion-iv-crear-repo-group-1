@@ -1,0 +1,82 @@
+
+---
+interface Props {
+  placeholder?: string;
+  valor?: string;
+}
+
+const {
+  placeholder = "Buscar por título o autor...",
+  valor = ""
+}: Props = Astro.props;
+---
+
+<form class="busqueda" action="" method="GET">
+  <label class="busqueda__etiqueta" for="buscar-libro">
+    Buscar libros
+  </label>
+
+  <div class="busqueda__grupo">
+    <input
+      id="buscar-libro"
+      class="busqueda__entrada"
+      type="search"
+      name="buscar"
+      placeholder={placeholder}
+      value={valor}
+    />
+
+    <button class="busqueda__boton" type="submit">
+      Buscar
+    </button>
+  </div>
+</form>
+
+<style>
+  .busqueda {
+    width: 100%;
+  }
+
+  .busqueda__etiqueta {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .busqueda__grupo {
+    display: flex;
+    gap: 10px;
+  }
+
+  .busqueda__entrada {
+    flex: 1;
+    min-width: 0;
+    padding: 12px 16px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    background: var(--color-surface);
+    color: var(--color-text);
+    font-size: 15px;
+  }
+
+  .busqueda__boton {
+    padding: 12px 22px;
+    border: none;
+    border-radius: var(--border-radius-lg);
+    background: var(--color-primary);
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .busqueda__boton:hover {
+    opacity: 0.9;
+  }
+
+  @media (max-width: 480px) {
+    .busqueda__grupo {
+      flex-direction: column;
+    }
+  }
+</style>

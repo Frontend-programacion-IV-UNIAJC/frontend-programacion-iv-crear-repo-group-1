@@ -16,7 +16,8 @@ const {
 
   <nav class="filtros__lista" aria-label="Filtrar libros por categoría">
     <a
-      href="?categoria=Todas"
+      href="#"
+      data-categoria="Todas"
       class:list={[
         "filtros__opcion",
         { "filtros__opcion--activa": categoriaSeleccionada === "Todas" }
@@ -27,7 +28,8 @@ const {
 
     {categorias.map((categoria) => (
       <a
-        href={`?categoria=${encodeURIComponent(categoria)}`}
+        href="#"
+        data-categoria={categoria}
         class:list={[
           "filtros__opcion",
           { "filtros__opcion--activa": categoriaSeleccionada === categoria }

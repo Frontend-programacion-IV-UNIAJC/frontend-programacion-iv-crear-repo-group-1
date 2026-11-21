@@ -1,13 +1,14 @@
 {
   "name": "bibliotech",
   "version": "1.0.0",
-  "description": "",
+  "description": "Sistema de biblioteca digital BiblioTech",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "deploy": "astro build && gh-pages -d dist --dotfiles -m \"deploy: sitio construido\""
   },
   "keywords": [],
   "author": "",
@@ -15,5 +16,8 @@
   "type": "module",
   "dependencies": {
     "astro": "^7.4.7"
+  },
+  "devDependencies": {
+    "gh-pages": "^6.3.0"
   }
 }

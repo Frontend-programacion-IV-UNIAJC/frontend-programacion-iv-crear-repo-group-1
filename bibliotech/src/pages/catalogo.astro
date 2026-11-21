@@ -1,362 +1,163 @@
 
 ---
 import Layout from "../layouts/Layout.astro";
-import { libros } from "../components/data/datos-prueba.js";
-
+import { obtenerLibros } from "../services/api.js";
 import CardGrid from "../components/catalogo/CardGrid.astro";
 import Filtros from "../components/catalogo/Filtros.astro";
 import BarraDeBusqueda from "../components/catalogo/BarraDeBusqueda.astro";
 
-const categorias = [
-  ...new Set(libros.map((libro) => libro.categoria))
-];
+interface Libro {
+  id: string | number;
+  titulo: string;
+  autor: string;
+  categoria: string;
+  imagen: string;
+  anio: number;
+  editorial: string;
+  descripcion: string;
+}
+
+const libros: Libro[] = await obtenerLibros();
+
+const categorias: string[] = Array.from(
+  new Set(libros.map((libro: Libro) => libro.categoria))
+);
 ---
 
 <Layout
   titulo="Catálogo | BiblioTech"
-  descripcion="Explora el catálogo de libros de BiblioTech."
+  descripcion="Explora nuestro catálogo de libros"
   activo="catalogo"
 >
-  <section class="contenedor pagina">
+  <section class="contenedor catalogo">
+    <div class="encabezado">
+      <h1>Catálogo de libros</h1>
+      <p>Explora y encuentra libros de tu interés.</p>
+    </div>
 
-    <p class="rotulo">Biblioteca digital</p>
+    <BarraDeBusqueda />
+    <Filtros categorias={categorias} />
 
-    <h1>Catálogo de libros</h1>
-
-    <p class="introduccion">
-      Explora y descubre libros disponibles en nuestra biblioteca.
+    <p id="contador" class="contador">
+      {libros.length} libros encontrados
     </p>
 
-    <!-- BARRA DE BÚSQUEDA -->
-    <div class="catalogo__busqueda">
-      <BarraDeBusqueda
-        placeholder="Buscar por título o autor..."
-      />
+    <div id="resultados">
+      <CardGrid libros={libros} />
     </div>
 
-    <!-- CONTENIDO DEL CATÁLOGO -->
-    <div class="catalogo__contenido">
-
-      <!-- FILTROS -->
-      <aside class="catalogo__filtros">
-        <Filtros categorias={categorias} />
-      </aside>
-
-      <!-- RESULTADOS -->
-      <div class="catalogo__resultados">
-
-        <p class="catalogo__conteo">
-          <strong id="total-libros">{libros.length}</strong>
-          libros encontrados
-        </p>
-
-        <!-- TARJETAS DE LIBROS -->
-        <CardGrid libros={libros} />
-
-        <!-- MENSAJE SIN RESULTADOS -->
-        <div class="catalogo__vacio" id="sin-resultados" hidden>
-          <h2>No encontramos libros</h2>
-
-          <p>
-            Intenta con otro título, autor o categoría.
-          </p>
-
-          <button type="button" id="limpiar-filtros">
-            Mostrar todos los libros
-          </button>
-        </div>
-
-      </div>
-    </div>
+    <p id="sin-resultados" class="sin-resultados" hidden>
+      No se encontraron libros con los filtros seleccionados.
+    </p>
   </section>
 </Layout>
 
 <script>
-  // ==========================================
-  // 1. OBTENER ELEMENTOS HTML
-  // ==========================================
+  const formulario = document.querySelector<HTMLFormElement>(".busqueda");
+  const busqueda = document.querySelector<HTMLInputElement>("#buscar-libro");
 
-  const formulario = document.querySelector<HTMLFormElement>(
-    ".busqueda"
-  );
+  const opcionesCategoria =
+    document.querySelectorAll<HTMLAnchorElement>(".filtros__opcion");
 
-  const entrada = document.querySelector<HTMLInputElement>(
-    'input[name="buscar"]'
-  );
+  const contador = document.querySelector<HTMLElement>("#contador");
+  const mensaje = document.querySelector<HTMLElement>("#sin-resultados");
 
-  const tarjetas = Array.from(
-    document.querySelectorAll<HTMLElement>(".libro")
-  );
+  let categoriaSeleccionada = "Todas";
 
-  const opciones = Array.from(
-    document.querySelectorAll<HTMLAnchorElement>(
-      ".filtros__opcion"
-    )
-  );
+  function filtrarLibros() {
+    const texto = busqueda?.value.toLowerCase().trim() || "";
+    const tarjetas = document.querySelectorAll<HTMLElement>(".libro");
 
-  const contador = document.querySelector<HTMLElement>(
-    "#total-libros"
-  );
-
-  const mensajeVacio = document.querySelector<HTMLElement>(
-    "#sin-resultados"
-  );
-
-  const botonLimpiar = document.querySelector<HTMLButtonElement>(
-    "#limpiar-filtros"
-  );
-
-  // ==========================================
-  // 2. CONFIGURACIÓN INICIAL
-  // ==========================================
-
-  const parametrosIniciales = new URLSearchParams(
-    window.location.search
-  );
-
-  let categoriaActiva =
-    parametrosIniciales.get("categoria") || "Todas";
-
-  if (entrada) {
-    entrada.value = parametrosIniciales.get("buscar") || "";
-  }
-
-  // ==========================================
-  // 3. APLICAR BÚSQUEDA Y FILTROS
-  // ==========================================
-
-  function actualizarFiltros() {
-    const texto = (entrada?.value || "")
-      .trim()
-      .toLowerCase();
-
-    let encontrados = 0;
+    let cantidad = 0;
 
     tarjetas.forEach((tarjeta) => {
-      const titulo = (
-        tarjeta.dataset.titulo || ""
-      ).toLowerCase();
+      const titulo = tarjeta.dataset.titulo?.toLowerCase() || "";
+      const autor = tarjeta.dataset.autor?.toLowerCase() || "";
+      const categoria = tarjeta.dataset.categoria || "";
 
-      const autor = (
-        tarjeta.dataset.autor || ""
-      ).toLowerCase();
-
-      const categoria =
-        tarjeta.dataset.categoria || "";
-
-      // Comprobar título y autor
       const coincideTexto =
-        titulo.includes(texto) ||
-        autor.includes(texto);
+        titulo.includes(texto) || autor.includes(texto);
 
-      // Comprobar categoría
       const coincideCategoria =
-        categoriaActiva === "Todas" ||
-        categoria === categoriaActiva;
+        categoriaSeleccionada === "Todas" ||
+        categoria === categoriaSeleccionada;
 
-      // Mostrar u ocultar tarjeta
-      const mostrar =
-        coincideTexto && coincideCategoria;
+      const mostrar = coincideTexto && coincideCategoria;
 
       tarjeta.hidden = !mostrar;
 
       if (mostrar) {
-        encontrados++;
+        cantidad++;
       }
     });
 
-    // Actualizar contador
     if (contador) {
-      contador.textContent = String(encontrados);
+      contador.textContent = `${cantidad} libros encontrados`;
     }
 
-    // Mostrar mensaje si no hay resultados
-    if (mensajeVacio) {
-      mensajeVacio.hidden = encontrados !== 0;
+    if (mensaje) {
+      mensaje.hidden = cantidad > 0;
     }
-
-    // Actualizar categoría seleccionada
-    opciones.forEach((opcion) => {
-      const activa =
-        opcion.textContent?.trim() === categoriaActiva;
-
-      opcion.classList.toggle(
-        "filtros__opcion--activa",
-        activa
-      );
-    });
   }
 
-  // ==========================================
-  // 4. ACTUALIZAR DIRECCIÓN URL
-  // ==========================================
-
-  function actualizarURL() {
-    const parametros = new URLSearchParams();
-
-    if (categoriaActiva !== "Todas") {
-      parametros.set("categoria", categoriaActiva);
-    }
-
-    const texto = (entrada?.value || "").trim();
-
-    if (texto) {
-      parametros.set("buscar", texto);
-    }
-
-    const nuevaURL = parametros.toString()
-      ? `${window.location.pathname}?${parametros.toString()}`
-      : window.location.pathname;
-
-    window.history.replaceState({}, "", nuevaURL);
-  }
-
-  // ==========================================
-  // 5. EVENTO DEL BOTÓN BUSCAR
-  // ==========================================
-
-  if (formulario) {
-    formulario.addEventListener("submit", (evento) => {
-      evento.preventDefault();
-
-      actualizarFiltros();
-      actualizarURL();
-    });
-  }
-
-  // ==========================================
-  // 6. BÚSQUEDA MIENTRAS SE ESCRIBE
-  // ==========================================
-
-  if (entrada) {
-    entrada.addEventListener("input", () => {
-      actualizarFiltros();
-      actualizarURL();
-    });
-  }
-
-  // ==========================================
-  // 7. EVENTO DE LOS FILTROS
-  // ==========================================
-
-  opciones.forEach((opcion) => {
+  opcionesCategoria.forEach((opcion) => {
     opcion.addEventListener("click", (evento) => {
       evento.preventDefault();
 
-      const url = new URL(opcion.href);
+      categoriaSeleccionada = opcion.dataset.categoria || "Todas";
 
-      categoriaActiva =
-        url.searchParams.get("categoria") || "Todas";
+      opcionesCategoria.forEach((elemento) => {
+        elemento.classList.remove("filtros__opcion--activa");
+      });
 
-      actualizarFiltros();
-      actualizarURL();
+      opcion.classList.add("filtros__opcion--activa");
+
+      filtrarLibros();
     });
   });
 
-  // ==========================================
-  // 8. LIMPIAR TODOS LOS FILTROS
-  // ==========================================
+  busqueda?.addEventListener("input", filtrarLibros);
 
-  if (botonLimpiar) {
-    botonLimpiar.addEventListener("click", () => {
-      categoriaActiva = "Todas";
+  formulario?.addEventListener("submit", (evento) => {
+    evento.preventDefault();
+    filtrarLibros();
+  });
 
-      if (entrada) {
-        entrada.value = "";
-      }
-
-      actualizarFiltros();
-      actualizarURL();
-    });
-  }
-
-  // ==========================================
-  // 9. MOSTRAR RESULTADOS INICIALES
-  // ==========================================
-
-  actualizarFiltros();
+  filtrarLibros();
 </script>
 
 <style>
-  .pagina {
+  .catalogo {
     padding-top: 48px;
-    padding-bottom: 48px;
-    min-height: 350px;
+    padding-bottom: 64px;
   }
 
-  .rotulo {
-    color: var(--color-primary);
-    font-weight: 700;
-  }
-
-  .introduccion {
-    margin-top: 8px;
-    margin-bottom: 28px;
-    color: var(--color-text-secondary);
-  }
-
-  .catalogo__busqueda {
-    max-width: 650px;
+  .encabezado {
     margin-bottom: 32px;
   }
 
-  .catalogo__contenido {
-    display: grid;
-    grid-template-columns: 240px minmax(0, 1fr);
-    gap: 32px;
-    align-items: start;
+  .encabezado h1 {
+    font-size: 2rem;
+    margin-bottom: 8px;
   }
 
-  .catalogo__filtros {
-    width: 100%;
+  .contador {
+    margin: 24px 0;
+    font-weight: 600;
   }
 
-  .catalogo__resultados {
-    min-width: 0;
-  }
-
-  .catalogo__conteo {
-    margin: 0 0 20px;
-    color: var(--color-text-secondary);
-  }
-
-  .catalogo__conteo strong {
-    color: var(--color-text);
-  }
-
-  .catalogo__vacio {
-    padding: 40px 20px;
+  .sin-resultados {
+    padding: 32px;
     text-align: center;
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-lg);
   }
 
-  .catalogo__vacio[hidden] {
-    display: none;
-  }
+  @media (max-width: 600px) {
+    .catalogo {
+      padding-top: 32px;
+    }
 
-  .catalogo__vacio button {
-    margin-top: 15px;
-    padding: 10px 18px;
-    color: white;
-    background: var(--color-primary);
-    border: none;
-    border-radius: var(--border-radius-lg);
-    cursor: pointer;
-  }
-
-  .catalogo__vacio button:hover {
-    opacity: 0.9;
-  }
-
-  .libro[hidden] {
-    display: none;
-  }
-
-  @media (max-width: 768px) {
-    .catalogo__contenido {
-      grid-template-columns: 1fr;
-      gap: 24px;
+    .encabezado h1 {
+      font-size: 1.6rem;
     }
   }
 </style>

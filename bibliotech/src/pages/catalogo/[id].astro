@@ -1,0 +1,169 @@
+
+---
+import Layout from "../../layouts/Layout.astro";
+import { obtenerLibros } from "../../services/api.js";
+
+interface Libro {
+  id: string | number;
+  titulo: string;
+  autor: string;
+  categoria: string;
+  imagen: string;
+  anio: number;
+  editorial: string;
+  descripcion: string;
+}
+
+export async function getStaticPaths() {
+  const libros: Libro[] = await obtenerLibros();
+
+  return libros
+    .filter((libro) => libro.id)
+    .map((libro) => ({
+      params: {
+        id: String(libro.id),
+      },
+      props: {
+        libro,
+      },
+    }));
+}
+
+const { libro } = Astro.props as { libro: Libro };
+
+const base = import.meta.env.BASE_URL.endsWith("/")
+  ? import.meta.env.BASE_URL
+  : `${import.meta.env.BASE_URL}/`;
+---
+
+<Layout
+  titulo={`${libro.titulo} | BiblioTech`}
+  descripcion={`Detalles del libro ${libro.titulo}`}
+  activo="catalogo"
+>
+  <section class="contenedor detalle">
+    <a href={`${base}catalogo/`} class="volver">
+      Volver al catálogo
+    </a>
+
+    <div class="detalle__contenido">
+      <div class="detalle__imagen">
+        <img
+          src={libro.imagen || "https://placehold.co/300x450?text=Sin+portada"}
+          alt={`Portada de ${libro.titulo}`}
+        />
+      </div>
+
+      <div class="detalle__informacion">
+        <span class="categoria">
+          {libro.categoria || "Categoría no disponible"}
+        </span>
+
+        <h1>{libro.titulo || "Título no disponible"}</h1>
+
+        <p class="autor">
+          {libro.autor || "Autor no disponible"}
+        </p>
+
+        <div class="datos">
+          <p>
+            <strong>Año:</strong>
+            {libro.anio || "No disponible"}
+          </p>
+
+          <p>
+            <strong>Editorial:</strong>
+            {libro.editorial || "No disponible"}
+          </p>
+
+          <p>
+            <strong>Descripción:</strong>
+            {libro.descripcion || "Descripción no disponible"}
+          </p>
+        </div>
+
+        <a href={`${base}catalogo/`} class="boton">
+          Regresar al catálogo
+        </a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .detalle {
+    padding-top: 48px;
+    padding-bottom: 64px;
+  }
+
+  .volver {
+    display: inline-block;
+    margin-bottom: 32px;
+    color: var(--color-primary);
+    font-weight: 600;
+  }
+
+  .detalle__contenido {
+    display: grid;
+    grid-template-columns: minmax(250px, 350px) minmax(0, 1fr);
+    gap: 48px;
+    align-items: start;
+  }
+
+  .detalle__imagen img {
+    width: 100%;
+    max-height: 480px;
+    object-fit: contain;
+    background: #f3f3f3;
+    border-radius: var(--border-radius-lg);
+  }
+
+  .categoria {
+    color: var(--color-primary);
+    font-weight: 700;
+  }
+
+  .detalle__informacion h1 {
+    margin-top: 12px;
+    font-size: 2rem;
+  }
+
+  .autor {
+    margin-top: 12px;
+    color: var(--color-text-secondary);
+  }
+
+  .datos {
+    margin-top: 28px;
+    line-height: 1.8;
+  }
+
+  .boton {
+    display: inline-block;
+    margin-top: 24px;
+    padding: 12px 18px;
+    color: white;
+    background: var(--color-primary);
+    border-radius: var(--border-radius-md);
+  }
+
+  .boton:hover {
+    background: var(--color-primary-dark);
+  }
+
+  @media (max-width: 600px) {
+    .detalle__contenido {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    .detalle__imagen {
+      max-width: 280px;
+      margin: 0 auto;
+    }
+
+    .detalle__informacion h1 {
+      font-size: 1.5rem;
+    }
+  }
+</style>
